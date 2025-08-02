@@ -42,7 +42,6 @@ import {
   Phone,
 } from "lucide-react";
 import "./index.css";
-import { div } from "framer-motion/client";
 const HomeSection = ({ activeSection }) => {
   const roles = [
     "Full Stack Developer",
