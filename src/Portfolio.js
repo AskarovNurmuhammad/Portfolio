@@ -932,7 +932,13 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         {/* Profile Section */}
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
-            AN
+            <image
+              src="/rasm.jpg"
+              alt="Nurmuhammad Askarov"
+              width={96}
+              height={96}
+              className="rounded-full object-cover"
+            />
           </div>
           <h3 className="text-xl font-semibold text-white mb-1">
             Askarov Nurmuhammad
