@@ -976,11 +976,9 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
             <img
-              src="/images/image.png" // import o'rniga
+              src="/images/image.png"
               alt="Nurmuhammad Askarov"
-              width={96}
-              height={96}
-              className="rounded-full object-cover"
+              className="w-24 h-24 mx-auto mb-4 rounded-full object-cover shadow-lg"
             />
           </div>
           <h3 className="text-xl font-semibold text-white mb-1">
