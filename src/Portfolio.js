@@ -49,43 +49,85 @@ const HomeSection = ({ activeSection }) => {
     "Java Developer",
     "Backend Developer",
   ];
+
   const [currentRole, setCurrentRole] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentRole((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    let timeout;
 
-  useEffect(() => {
-    const currentRoleText = roles[currentRole];
-    let index = 0;
-    setTypedText("");
-    setIsTyping(true);
+    const animateText = () => {
+      const currentRoleText = roles[currentRole];
 
-    const typeInterval = setInterval(() => {
-      if (index < currentRoleText.length) {
-        setTypedText(currentRoleText.slice(0, index + 1));
-        index++;
-      } else {
+      if (!isDeleting && typedText !== currentRoleText) {
+        // Yozish jarayoni
+        setTypedText(currentRoleText.slice(0, typedText.length + 1));
+        timeout = setTimeout(animateText, 100);
+      } else if (!isDeleting && typedText === currentRoleText) {
+        // To'liq yozilgandan keyin kutish
         setIsTyping(false);
-        clearInterval(typeInterval);
+        timeout = setTimeout(() => {
+          setIsDeleting(true);
+          setIsTyping(true);
+        }, 2000);
+      } else if (isDeleting && typedText !== "") {
+        // O'chirish jarayoni
+        setTypedText(currentRoleText.slice(0, typedText.length - 1));
+        timeout = setTimeout(animateText, 50);
+      } else if (isDeleting && typedText === "") {
+        // O'chirish tugagach keyingi rolga o'tish
+        setIsDeleting(false);
+        setCurrentRole((prev) => (prev + 1) % roles.length);
+        timeout = setTimeout(animateText, 100);
       }
-    }, 100);
+    };
 
-    return () => clearInterval(typeInterval);
-  }, [currentRole, roles]);
+    timeout = setTimeout(animateText, 100);
+
+    return () => clearTimeout(timeout);
+  }, [currentRole, typedText, isDeleting, isTyping, roles]);
 
   const techIcons = [
-    { name: "React", icon: "⚛️", color: "from-blue-400 to-cyan-400" },
-    { name: "Next.js", icon: "▲", color: "from-gray-800 to-gray-600" },
-    { name: "Java", icon: "☕", color: "from-orange-500 to-red-500" },
-    { name: "Spring", icon: "🍃", color: "from-green-500 to-emerald-500" },
-    { name: "Node.js", icon: "🟢", color: "from-green-600 to-green-400" },
-    { name: "TypeScript", icon: "TS", color: "from-blue-600 to-blue-400" },
+    {
+      name: "React",
+      icon: (
+        <FontAwesomeIcon icon={faReact} size="2x" className="text-cyan-400" />
+      ),
+      color: "from-blue-400 to-cyan-400",
+    },
+    {
+      name: "Next.js",
+      icon: (
+        <FontAwesomeIcon icon={faNodeJs} size="2x" className="text-green-500" />
+      ),
+      color: "from-gray-800 to-gray-600",
+    },
+    {
+      name: "Java",
+      icon: (
+        <FontAwesomeIcon icon={faJava} size="2x" className="text-orange-600" />
+      ),
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      name: "Spring",
+      icon: <div className="text-green-400 font-bold text-sm">SPRING</div>,
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      name: "Node.js",
+      icon: (
+        <FontAwesomeIcon icon={faNodeJs} size="2x" className="text-green-500" />
+      ),
+      color: "from-green-600 to-green-400",
+    },
+    {
+      name: "TypeScript",
+      icon: <div className="text-blue-500 font-bold text-xl">TS</div>,
+      color: "from-blue-600 to-blue-400",
+    },
   ];
 
   if (activeSection !== "home") return null;
@@ -111,12 +153,12 @@ const HomeSection = ({ activeSection }) => {
           <div className="h-12 flex items-center justify-center">
             <p className="text-xl md:text-2xl lg:text-3xl">
               I'm a{" "}
-              <span className="text-transparent bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text font-bold">
+              <span className="text-transparent bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text font-bold min-w-[300px] inline-block text-left">
                 {typedText}
               </span>
               <span
                 className={`inline-block w-0.5 h-6 md:h-8 bg-blue-400 ml-1 ${
-                  isTyping ? "animate-pulse" : "animate-ping"
+                  isTyping ? "opacity-100" : "animate-pulse"
                 }`}
               ></span>
             </p>
@@ -127,10 +169,10 @@ const HomeSection = ({ activeSection }) => {
           {techIcons.map((tech, index) => (
             <div
               key={index}
-              className={`group relative w-16 h-16 bg-gradient-to-br ${tech.color} rounded-xl flex items-center justify-center text-xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer`}
+              className={`group relative w-16 h-16 bg-gradient-to-br ${tech.color} rounded-xl flex items-center justify-center text-xl font-bold text-white shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-110`}
               title={tech.name}
             >
-              <span className="relative z-10 group-hover:animate-swing">
+              <span className="relative z-10 group-hover:animate-bounce">
                 {tech.icon}
               </span>
               <div className="absolute inset-0 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -141,14 +183,14 @@ const HomeSection = ({ activeSection }) => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a
             href="#contact"
-            className="group relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+            className="group relative bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:scale-105"
           >
             <span className="relative z-10">Contact Me</span>
             <div className="absolute inset-0 bg-white/10 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
           </a>
           <a
             href="/resume.pdf"
-            className="group flex items-center gap-2 border-2 border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-all duration-300"
+            className="group flex items-center gap-2 border-2 border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-all duration-300 transform hover:scale-105"
           >
             <Download size={20} />
             <span>Download CV</span>
@@ -933,7 +975,7 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
             <image
-              src="/rasm.jpg"
+              src="/rasm.png"
               alt="Nurmuhammad Askarov"
               width={96}
               height={96}
