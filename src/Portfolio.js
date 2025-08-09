@@ -41,6 +41,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
+import imageprofile from "/images/image.png";
 import "./index.css";
 const HomeSection = ({ activeSection }) => {
   const roles = [
@@ -974,8 +975,8 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         {/* Profile Section */}
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
-            <image
-              src="/image.png"
+            <img
+              src={imageprofile} // {} ichida, qoshtirnoqsiz
               alt="Nurmuhammad Askarov"
               width={96}
               height={96}
