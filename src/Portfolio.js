@@ -975,7 +975,7 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-lg">
             <image
-              src="/rasm.png"
+              src="https://avatars.githubusercontent.com/u/122333946?s=400&u=22de20f1c705d7f4540114be4196c0b9281ac204&v=4"
               alt="Nurmuhammad Askarov"
               width={96}
               height={96}
