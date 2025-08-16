@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faJava,
@@ -10,12 +10,9 @@ import {
   faGit,
   faBootstrap,
   faSass,
-  faGithub,
-  faNpm,
-  faAws,
 } from "@fortawesome/free-brands-svg-icons";
 
-import { faDatabase, faFire } from "@fortawesome/free-solid-svg-icons";
+import { faFire } from "@fortawesome/free-solid-svg-icons";
 
 import {
   Github,
@@ -34,12 +31,10 @@ import {
   X,
   Linkedin,
   Instagram,
-  Facebook,
   ChevronLeft,
   ChevronRight,
   Download,
   MapPin,
-  Phone,
 } from "lucide-react";
 // import imageprofile from "/images/image.png";
 import "./index.css";
@@ -982,6 +977,8 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
               src="/images/image.png"
               alt="Nurmuhammad Askarov"
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <h3 className="text-xl font-semibold text-white mb-1">
