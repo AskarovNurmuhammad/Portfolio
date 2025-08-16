@@ -968,8 +968,11 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-6 right-6 lg:hidden text-gray-400 hover:text-white transition-colors duration-300"
+          aria-label="Menyuni yopish"
+          aria-expanded={isOpen} // Menyu holatini bildiradi
         >
           <X size={24} />
+          <span className="sr-only">Menyuni yopish</span>
         </button>
 
         {/* Profile Section */}
@@ -1101,8 +1104,12 @@ const Portfolio = () => {
       <button
         onClick={() => setSidebarOpen(true)}
         className="fixed top-6 left-6 z-50 lg:hidden bg-gray-900/80 backdrop-blur-sm p-3 rounded-full text-white hover:bg-gray-800/80 transition-colors duration-300 shadow-lg border border-gray-700/50"
+        aria-label="Asosiy menyuni ochish"
+        aria-expanded={sidebarOpen} // Menyu holatini bildiradi
+        aria-controls="main-sidebar" // Qaysi elementni boshqarishini bildiradi
       >
         <Menu size={24} />
+        <span className="sr-only">Asosiy menyuni ochish</span>
       </button>
 
       {/* Sidebar */}
