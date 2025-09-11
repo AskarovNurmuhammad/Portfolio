@@ -550,6 +550,24 @@ const PortfolioSection = ({ activeSection }) => {
 
   const projects = [
     {
+      name: "Interactive Timeline Component",
+      description:
+        "A professional, responsive timeline component for showcasing project roadmaps and company milestones. Features smooth animations, touch/swipe navigation, keyboard controls, and adaptive design for all devices. Built with vanilla JavaScript for optimal performance.",
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center",
+      github: "https://github.com/AskarovNurmuhammad/timeline",
+      demo: "https://timeline-three-brown.vercel.app/",
+      tech: [
+        "HTML5",
+        "CSS3",
+        "Vanilla JavaScript",
+        "Responsive Design",
+        "Touch Navigation",
+        "Animations",
+      ],
+      color: "from-purple-500 to-indigo-600",
+    },
+    {
       name: "Barbershop Management System",
       description:
         "A comprehensive barbershop booking and management platform featuring real-time appointment scheduling, customer management, and responsive design. Built with modern React patterns and optimized for performance.",
