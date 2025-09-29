@@ -550,6 +550,26 @@ const PortfolioSection = ({ activeSection }) => {
 
   const projects = [
     {
+      name: "Kvorum Real Estate Platform",
+      description:
+        "A comprehensive real estate agency platform offering secure property transactions in Moscow and Moscow region. Features complete brokerage services including property sales/purchases within 14 days, fast document processing, legal support, and mortgage assistance. Built with pixel-perfect design and smooth animations for optimal user experience.",
+      image:
+        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop&crop=center",
+      github: "https://github.com/AskarovNurmuhammad/kvorum",
+      demo: "https://kvorum.vercel.app/",
+      tech: [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "Responsive Design",
+        "Figma to Code",
+        "Pixel Perfect",
+        "Animations",
+        "Form Validation",
+      ],
+      color: "from-emerald-500 to-teal-600",
+    },
+    {
       name: "Interactive Timeline Component",
       description:
         "A professional, responsive timeline component for showcasing project roadmaps and company milestones. Features smooth animations, touch/swipe navigation, keyboard controls, and adaptive design for all devices. Built with vanilla JavaScript for optimal performance.",
