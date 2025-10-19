@@ -194,7 +194,7 @@ const HomeSection = () => {
 // AboutSection Component
 const AboutSection = () => {
   return (
-    <section id="about" className="relative overflow-hidden py-20">
+    <section id="about" className="relative overflow-hidden py-20 mt-5">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-black/60"></div>
       <div className="relative z-10 px-4 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
