@@ -36,7 +36,7 @@ import {
 } from "lucide-react";
 import "./index.css";
 
-// Debounce funksiyasi: Skroll hodisalarini cheklash uchun
+// Debounce funksiyasi
 const debounce = (func, wait) => {
   let timeout;
   return (...args) => {
@@ -46,7 +46,7 @@ const debounce = (func, wait) => {
 };
 
 // HomeSection Component
-const HomeSection = ({ activeSection }) => {
+const HomeSection = () => {
   const roles = [
     "Full Stack Developer",
     "React Developer",
@@ -130,13 +130,8 @@ const HomeSection = ({ activeSection }) => {
     },
   ];
 
-  if (activeSection !== "home") return null;
-
   return (
-    <section
-      id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
-    >
+    <section id="home" className="relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-cyan-900/20"></div>
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -197,14 +192,9 @@ const HomeSection = ({ activeSection }) => {
 };
 
 // AboutSection Component
-const AboutSection = ({ activeSection }) => {
-  if (activeSection !== "about") return null;
-
+const AboutSection = () => {
   return (
-    <section
-      id="about"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-    >
+    <section id="about" className="relative overflow-hidden py-20">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-black/60"></div>
       <div className="relative z-10 px-4 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -291,7 +281,7 @@ const AboutSection = ({ activeSection }) => {
 };
 
 // SkillsSection Component
-const SkillsSection = ({ activeSection }) => {
+const SkillsSection = () => {
   const [selectedTab, setSelectedTab] = useState("frontend");
 
   const skillCategories = {
@@ -464,13 +454,8 @@ const SkillsSection = ({ activeSection }) => {
     ],
   };
 
-  if (activeSection !== "skills") return null;
-
   return (
-    <section
-      id="skills"
-      className="min-h-screen flex flex-col justify-center relative overflow-hidden py-20"
-    >
+    <section id="skills" className="relative overflow-hidden py-20">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
       <div className="relative z-10 px-4 max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
@@ -533,7 +518,7 @@ const SkillsSection = ({ activeSection }) => {
 };
 
 // PortfolioSection Component
-const PortfolioSection = ({ activeSection }) => {
+const PortfolioSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const projects = [
@@ -624,13 +609,8 @@ const PortfolioSection = ({ activeSection }) => {
     setCurrentSlide((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
-  if (activeSection !== "portfolio") return null;
-
   return (
-    <section
-      id="portfolio"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-    >
+    <section id="portfolio" className="relative overflow-hidden py-20">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
       <div className="relative z-10 px-4 max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
@@ -738,7 +718,7 @@ const PortfolioSection = ({ activeSection }) => {
 };
 
 // ContactSection Component
-const ContactSection = ({ activeSection }) => {
+const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -760,13 +740,8 @@ const ContactSection = ({ activeSection }) => {
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
-  if (activeSection !== "contact") return null;
-
   return (
-    <section
-      id="contact"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
-    >
+    <section id="contact" className="relative overflow-hidden py-20">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
       <div className="relative z-10 px-4 max-w-6xl mx-auto w-full">
         <div className="text-center mb-16">
@@ -999,7 +974,7 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
             <button
               key={item.id}
               onClick={() => {
-                setActiveSection(item.id); // scrollToSection ishlatiladi
+                setActiveSection(item.id);
                 setIsOpen(false);
               }}
               className={`w-full flex items-center space-x-3 px-4 py-4 rounded-xl mb-2 transition-all duration-300 ${
@@ -1043,62 +1018,40 @@ const Portfolio = () => {
       "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1920&h=1080&fit=crop",
   };
 
-  // Silliq skroll qilish funksiyasi
+  // Silliq skroll qilish
   const scrollToSection = (sectionId) => {
-    setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setActiveSection(sectionId);
     }
   };
 
-  // Skrollni kuzatish
-  const handleScroll = useCallback(
-    debounce(() => {
-      const sections = ["home", "about", "skills", "portfolio", "contact"];
-      let currentSection = "home";
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 2 && rect.bottom >= 0) {
-            currentSection = section;
-            break;
-          }
-        }
-      }
-
-      if (currentSection !== activeSection) {
-        setActiveSection(currentSection);
-      }
-    }, 100),
-    [activeSection]
-  );
-
-  // Skroll hodisasini tinglash
+  // Intersection Observer yordamida faol bo'limni aniqlash
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+    const sections = ["home", "about", "skills", "portfolio", "contact"];
+    const observerOptions = {
+      root: null,
+      threshold: 0.5, // 50% ko'rinsa faol bo'ladi
     };
-  }, [handleScroll]);
 
-  // Navbar bosilishini boshqarish
-  useEffect(() => {
-    const navButtons = document.querySelectorAll("[data-section]");
-    navButtons.forEach((button) => {
-      button.addEventListener("click", (e) => {
-        const sectionId = e.target.getAttribute("data-section");
-        if (sectionId) {
-          scrollToSection(sectionId);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
         }
       });
+    }, observerOptions);
+
+    sections.forEach((section) => {
+      const element = document.getElementById(section);
+      if (element) observer.observe(element);
     });
 
     return () => {
-      navButtons.forEach((button) => {
-        button.removeEventListener("click", () => {});
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element) observer.unobserve(element);
       });
     };
   }, []);
@@ -1121,16 +1074,16 @@ const Portfolio = () => {
       </button>
       <Sidebar
         activeSection={activeSection}
-        setActiveSection={scrollToSection} // scrollToSection uzatiladi
+        setActiveSection={scrollToSection}
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
       />
       <div className="lg:ml-80 relative z-10">
-        <HomeSection activeSection={activeSection} />
-        <AboutSection activeSection={activeSection} />
-        <SkillsSection activeSection={activeSection} />
-        <PortfolioSection activeSection={activeSection} />
-        <ContactSection activeSection={activeSection} />
+        <HomeSection />
+        <AboutSection />
+        <SkillsSection />
+        <PortfolioSection />
+        <ContactSection />
       </div>
     </div>
   );
