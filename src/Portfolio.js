@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faJava,
@@ -11,9 +11,7 @@ import {
   faBootstrap,
   faSass,
 } from "@fortawesome/free-brands-svg-icons";
-
 import { faFire } from "@fortawesome/free-solid-svg-icons";
-
 import {
   Github,
   Mail,
@@ -36,8 +34,18 @@ import {
   Download,
   MapPin,
 } from "lucide-react";
-// import imageprofile from "/images/image.png";
 import "./index.css";
+
+// Debounce funksiyasi: Skroll hodisalarini cheklash uchun
+const debounce = (func, wait) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(null, args), wait);
+  };
+};
+
+// HomeSection Component
 const HomeSection = ({ activeSection }) => {
   const roles = [
     "Full Stack Developer",
@@ -58,22 +66,18 @@ const HomeSection = ({ activeSection }) => {
       const currentRoleText = roles[currentRole];
 
       if (!isDeleting && typedText !== currentRoleText) {
-        // Yozish jarayoni
         setTypedText(currentRoleText.slice(0, typedText.length + 1));
         timeout = setTimeout(animateText, 100);
       } else if (!isDeleting && typedText === currentRoleText) {
-        // To'liq yozilgandan keyin kutish
         setIsTyping(false);
         timeout = setTimeout(() => {
           setIsDeleting(true);
           setIsTyping(true);
         }, 2000);
       } else if (isDeleting && typedText !== "") {
-        // O'chirish jarayoni
         setTypedText(currentRoleText.slice(0, typedText.length - 1));
         timeout = setTimeout(animateText, 50);
       } else if (isDeleting && typedText === "") {
-        // O'chirish tugagach keyingi rolga o'tish
         setIsDeleting(false);
         setCurrentRole((prev) => (prev + 1) % roles.length);
         timeout = setTimeout(animateText, 100);
@@ -134,18 +138,15 @@ const HomeSection = ({ activeSection }) => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-cyan-900/20"></div>
-
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
-
       <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
             Askarov Nurmuhammad
           </h1>
-
           <div className="h-12 flex items-center justify-center">
             <p className="text-xl md:text-2xl lg:text-3xl">
               I'm a{" "}
@@ -160,7 +161,6 @@ const HomeSection = ({ activeSection }) => {
             </p>
           </div>
         </div>
-
         <div className="flex justify-center flex-wrap gap-4 mb-12">
           {techIcons.map((tech, index) => (
             <div
@@ -175,7 +175,6 @@ const HomeSection = ({ activeSection }) => {
             </div>
           ))}
         </div>
-
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a
             href="#contact"
@@ -197,6 +196,7 @@ const HomeSection = ({ activeSection }) => {
   );
 };
 
+// AboutSection Component
 const AboutSection = ({ activeSection }) => {
   if (activeSection !== "about") return null;
 
@@ -206,7 +206,6 @@ const AboutSection = ({ activeSection }) => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-black/60"></div>
-
       <div className="relative z-10 px-4 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
@@ -216,7 +215,6 @@ const AboutSection = ({ activeSection }) => {
               </h2>
               <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-8"></div>
             </div>
-
             <div className="space-y-6 text-lg text-gray-200 leading-relaxed">
               <p className="text-xl">
                 Hi, I'm{" "}
@@ -241,7 +239,6 @@ const AboutSection = ({ activeSection }) => {
                 on innovative projects.
               </p>
             </div>
-
             <div className="grid grid-cols-2 gap-4 pt-6">
               <div className="flex items-center gap-3">
                 <MapPin className="text-blue-400" size={20} />
@@ -253,7 +250,6 @@ const AboutSection = ({ activeSection }) => {
               </div>
             </div>
           </div>
-
           <div className="grid grid-cols-2 gap-6">
             <div className="group bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all duration-300 transform hover:scale-105">
               <Code className="w-12 h-12 text-blue-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
@@ -264,7 +260,6 @@ const AboutSection = ({ activeSection }) => {
                 React, Next.js, TypeScript
               </p>
             </div>
-
             <div className="group bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-green-500/30 transition-all duration-300 transform hover:scale-105">
               <Database className="w-12 h-12 text-green-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
               <h3 className="text-xl font-semibold mb-2 text-white text-center">
@@ -272,7 +267,6 @@ const AboutSection = ({ activeSection }) => {
               </h3>
               <p className="text-gray-300 text-center">Java, Spring, Node.js</p>
             </div>
-
             <div className="group bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all duration-300 transform hover:scale-105">
               <Globe className="w-12 h-12 text-purple-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
               <h3 className="text-xl font-semibold mb-2 text-white text-center">
@@ -282,7 +276,6 @@ const AboutSection = ({ activeSection }) => {
                 End-to-end development
               </p>
             </div>
-
             <div className="group bg-gradient-to-br from-yellow-500/10 to-orange-500/10 backdrop-blur-sm p-8 rounded-2xl border border-white/10 hover:border-yellow-500/30 transition-all duration-300 transform hover:scale-105">
               <Smartphone className="w-12 h-12 text-yellow-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
               <h3 className="text-xl font-semibold mb-2 text-white text-center">
@@ -297,6 +290,7 @@ const AboutSection = ({ activeSection }) => {
   );
 };
 
+// SkillsSection Component
 const SkillsSection = ({ activeSection }) => {
   const [selectedTab, setSelectedTab] = useState("frontend");
 
@@ -478,7 +472,6 @@ const SkillsSection = ({ activeSection }) => {
       className="min-h-screen flex flex-col justify-center relative overflow-hidden py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
-
       <div className="relative z-10 px-4 max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -486,8 +479,6 @@ const SkillsSection = ({ activeSection }) => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
         </div>
-
-        {/* Tab Navigation */}
         <div className="flex justify-center mb-12">
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-full p-2 border border-gray-700">
             <button
@@ -512,8 +503,6 @@ const SkillsSection = ({ activeSection }) => {
             </button>
           </div>
         </div>
-
-        {/* Skills Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
           {skillCategories[selectedTab].map((skill, index) => (
             <div
@@ -527,8 +516,6 @@ const SkillsSection = ({ activeSection }) => {
                 <h3 className="text-white font-medium text-sm mb-3">
                   {skill.name}
                 </h3>
-
-                {/* Progress Bar */}
                 <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
                   <div
                     className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000 ease-out"
@@ -545,6 +532,7 @@ const SkillsSection = ({ activeSection }) => {
   );
 };
 
+// PortfolioSection Component
 const PortfolioSection = ({ activeSection }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -644,7 +632,6 @@ const PortfolioSection = ({ activeSection }) => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
-
       <div className="relative z-10 px-4 max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -656,12 +643,9 @@ const PortfolioSection = ({ activeSection }) => {
             modern web development
           </p>
         </div>
-
-        {/* Project Showcase */}
         <div className="relative max-w-6xl mx-auto">
           <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm rounded-3xl border border-gray-700/50 overflow-hidden">
             <div className="grid lg:grid-cols-2 gap-0">
-              {/* Project Image */}
               <div className="relative h-80 lg:h-96 overflow-hidden">
                 <img
                   src={projects[currentSlide].image}
@@ -672,8 +656,6 @@ const PortfolioSection = ({ activeSection }) => {
                   className={`absolute inset-0 bg-gradient-to-r ${projects[currentSlide].color} opacity-20`}
                 ></div>
               </div>
-
-              {/* Project Info */}
               <div className="p-8 lg:p-12 flex flex-col justify-center">
                 <div className="mb-6">
                   <h3
@@ -685,7 +667,6 @@ const PortfolioSection = ({ activeSection }) => {
                     {projects[currentSlide].description}
                   </p>
                 </div>
-
                 <div className="flex flex-wrap gap-2 mb-8">
                   {projects[currentSlide].tech.map((tech, techIndex) => (
                     <span
@@ -696,7 +677,6 @@ const PortfolioSection = ({ activeSection }) => {
                     </span>
                   ))}
                 </div>
-
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a
                     href={projects[currentSlide].github}
@@ -726,15 +706,12 @@ const PortfolioSection = ({ activeSection }) => {
               </div>
             </div>
           </div>
-
-          {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-800/80 hover:bg-gray-700 backdrop-blur-sm p-4 rounded-full transition-all duration-300 border border-gray-600 hover:border-gray-500"
           >
             <ChevronLeft size={24} className="text-white" />
           </button>
-
           <button
             onClick={nextSlide}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-800/80 hover:bg-gray-700 backdrop-blur-sm p-4 rounded-full transition-all duration-300 border border-gray-600 hover:border-gray-500"
@@ -742,8 +719,6 @@ const PortfolioSection = ({ activeSection }) => {
             <ChevronRight size={24} className="text-white" />
           </button>
         </div>
-
-        {/* Dots Indicator */}
         <div className="flex justify-center mt-12 space-x-3">
           {projects.map((_, index) => (
             <button
@@ -762,6 +737,7 @@ const PortfolioSection = ({ activeSection }) => {
   );
 };
 
+// ContactSection Component
 const ContactSection = ({ activeSection }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -779,7 +755,6 @@ const ContactSection = ({ activeSection }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
     console.log("Form submitted:", formData);
     alert("Thank you for your message! I'll get back to you soon.");
     setFormData({ name: "", email: "", subject: "", message: "" });
@@ -793,7 +768,6 @@ const ContactSection = ({ activeSection }) => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 to-black/70"></div>
-
       <div className="relative z-10 px-4 max-w-6xl mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -807,15 +781,12 @@ const ContactSection = ({ activeSection }) => {
             I am available for freelance work and collaboration opportunities.
           </p>
         </div>
-
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Contact Info */}
           <div className="space-y-8">
             <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50">
               <h3 className="text-2xl font-bold text-white mb-6">
                 Get in Touch
               </h3>
-
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
@@ -828,7 +799,6 @@ const ContactSection = ({ activeSection }) => {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center">
                     <MapPin className="text-white" size={20} />
@@ -838,7 +808,6 @@ const ContactSection = ({ activeSection }) => {
                     <p className="text-white font-medium">Uzbekistan</p>
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                     <Briefcase className="text-white" size={20} />
@@ -852,8 +821,6 @@ const ContactSection = ({ activeSection }) => {
                 </div>
               </div>
             </div>
-
-            {/* Social Links */}
             <div className="flex justify-center lg:justify-start space-x-4">
               <a
                 href="https://github.com/AskarovNurmuhammad"
@@ -877,8 +844,6 @@ const ContactSection = ({ activeSection }) => {
               </a>
             </div>
           </div>
-
-          {/* Contact Form */}
           <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -911,7 +876,6 @@ const ContactSection = ({ activeSection }) => {
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">
                   Subject
@@ -926,7 +890,6 @@ const ContactSection = ({ activeSection }) => {
                   placeholder="Project discussion"
                 />
               </div>
-
               <div>
                 <label className="block text-gray-300 text-sm font-medium mb-2">
                   Message
@@ -941,7 +904,6 @@ const ContactSection = ({ activeSection }) => {
                   placeholder="Tell me about your project..."
                 />
               </div>
-
               <button
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
@@ -983,32 +945,26 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
-
-      {/* Sidebar */}
       <div
         className={`fixed left-0 top-0 h-full w-80 bg-gray-900/95 backdrop-blur-sm z-50 transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 border-r border-gray-700/50`}
       >
-        {/* Close button for mobile */}
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-6 right-6 lg:hidden text-gray-400 hover:text-white transition-colors duration-300"
           aria-label="Menyuni yopish"
-          aria-expanded={isOpen} // Menyu holatini bildiradi
+          aria-expanded={isOpen}
         >
           <X size={24} />
           <span className="sr-only">Menyuni yopish</span>
         </button>
-
-        {/* Profile Section */}
         <div className="p-8 text-center border-b border-gray-700/50">
           <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden shadow-lg">
             <img
@@ -1023,8 +979,6 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
             Askarov Nurmuhammad
           </h3>
           <p className="text-gray-400 text-sm mb-4">Full Stack Developer</p>
-
-          {/* Social Links */}
           <div className="flex justify-center space-x-3">
             {socialLinks.map((social, index) => (
               <a
@@ -1040,14 +994,12 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
             ))}
           </div>
         </div>
-
-        {/* Navigation */}
         <nav className="p-6">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => {
-                setActiveSection(item.id);
+                setActiveSection(item.id); // scrollToSection ishlatiladi
                 setIsOpen(false);
               }}
               className={`w-full flex items-center space-x-3 px-4 py-4 rounded-xl mb-2 transition-all duration-300 ${
@@ -1061,8 +1013,6 @@ const Sidebar = ({ activeSection, setActiveSection, isOpen, setIsOpen }) => {
             </button>
           ))}
         </nav>
-
-        {/* Contact Info at bottom */}
         <div className="absolute bottom-6 left-6 right-6">
           <div className="text-center">
             <p className="text-blue-400 text-sm font-medium">
@@ -1081,7 +1031,6 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Background images for different sections
   const backgroundImages = {
     home: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=1920&h=1080&fit=crop",
     about:
@@ -1094,7 +1043,7 @@ const Portfolio = () => {
       "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1920&h=1080&fit=crop",
   };
 
-  // Smooth scrolling between sections
+  // Silliq skroll qilish funksiyasi
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
@@ -1103,19 +1052,46 @@ const Portfolio = () => {
     }
   };
 
-  // Handle navigation clicks
-  useEffect(() => {
-    const handleSectionChange = (sectionId) => {
-      scrollToSection(sectionId);
-    };
+  // Skrollni kuzatish
+  const handleScroll = useCallback(
+    debounce(() => {
+      const sections = ["home", "about", "skills", "portfolio", "contact"];
+      let currentSection = "home";
 
-    // Add event listeners for smooth navigation
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= 0) {
+            currentSection = section;
+            break;
+          }
+        }
+      }
+
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+    }, 100),
+    [activeSection]
+  );
+
+  // Skroll hodisasini tinglash
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
+  // Navbar bosilishini boshqarish
+  useEffect(() => {
     const navButtons = document.querySelectorAll("[data-section]");
     navButtons.forEach((button) => {
       button.addEventListener("click", (e) => {
         const sectionId = e.target.getAttribute("data-section");
         if (sectionId) {
-          handleSectionChange(sectionId);
+          scrollToSection(sectionId);
         }
       });
     });
@@ -1129,33 +1105,26 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white relative">
-      {/* Background Image */}
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 z-0"
         style={{ backgroundImage: `url(${backgroundImages[activeSection]})` }}
       />
-
-      {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
         className="fixed top-6 left-6 z-50 lg:hidden bg-gray-900/80 backdrop-blur-sm p-3 rounded-full text-white hover:bg-gray-800/80 transition-colors duration-300 shadow-lg border border-gray-700/50"
         aria-label="Asosiy menyuni ochish"
-        aria-expanded={sidebarOpen} // Menyu holatini bildiradi
-        aria-controls="main-sidebar" // Qaysi elementni boshqarishini bildiradi
+        aria-expanded={sidebarOpen}
+        aria-controls="main-sidebar"
       >
         <Menu size={24} />
         <span className="sr-only">Asosiy menyuni ochish</span>
       </button>
-
-      {/* Sidebar */}
       <Sidebar
         activeSection={activeSection}
-        setActiveSection={setActiveSection}
+        setActiveSection={scrollToSection} // scrollToSection uzatiladi
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
       />
-
-      {/* Main Content */}
       <div className="lg:ml-80 relative z-10">
         <HomeSection activeSection={activeSection} />
         <AboutSection activeSection={activeSection} />
