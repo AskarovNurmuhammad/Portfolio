@@ -20,6 +20,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
+#home {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
 
 ::-webkit-scrollbar {
   width: 8px;
